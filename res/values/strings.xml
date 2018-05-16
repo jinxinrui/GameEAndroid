@@ -9,4 +9,18 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string-array name="consoleSystemOptions">
+        <item>Nintendo Switch</item>
+        <item>PS4</item>
+        <item>XBox One</item>
+    </string-array>
+
+    <string-array name="regionOptions">
+        <item>US</item>
+        <item>EU</item>
+        <item>JP</item>
+        <item>AU</item>
+        <item>RU</item>
+    </string-array>
 </resources>

@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".AddPostActivity">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/textView10"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Title:"
+                android:textSize="24sp" />
+
+            <EditText
+                android:id="@+id/addTitleText"
+                android:layout_width="266dp"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="Title"
+                android:inputType="textPersonName" />
+
+            <TextView
+                android:id="@+id/textView8"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Console System"
+                android:textSize="24sp"
+                tools:layout_editor_absoluteX="16dp"
+                tools:layout_editor_absoluteY="94dp" />
+            <Spinner
+                android:id="@+id/systemSpinner"
+                android:layout_width="200dp"
+                android:layout_height="30dp"
+                android:entries="@array/consoleSystemOptions"/>
+            <TextView
+                android:id="@+id/textView11"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Region"
+                android:textSize="24sp"
+                tools:layout_editor_absoluteX="16dp"
+                tools:layout_editor_absoluteY="156dp" />
+
+            <Spinner
+                android:id="@+id/regionSpinner"
+                android:layout_width="200dp"
+                android:layout_height="30dp"
+                tools:layout_editor_absoluteX="16dp"
+                tools:layout_editor_absoluteY="200dp"
+                android:entries="@array/regionOptions"/>
+
+            <TextView
+                android:id="@+id/textView12"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Price:"
+                android:textSize="24sp"
+                tools:layout_editor_absoluteX="16dp"
+                tools:layout_editor_absoluteY="245dp" />
+
+            <EditText
+                android:id="@+id/addPriceText"
+                android:layout_width="40dp"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="numberDecimal"
+                tools:layout_editor_absoluteX="84dp"
+                tools:layout_editor_absoluteY="245dp" />
+
+            <CheckBox
+                android:id="@+id/checkBox1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Scratches"
+                tools:layout_editor_absoluteX="16dp"
+                tools:layout_editor_absoluteY="306dp" />
+
+            <CheckBox
+                android:id="@+id/checkBox2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="With Case"
+                tools:layout_editor_absoluteX="16dp"
+                tools:layout_editor_absoluteY="354dp" />
+            <Button
+                android:id="@+id/browseButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Browse Photo"/>
+
+            <ImageView
+                android:id="@+id/addPostPhoto"
+                android:layout_width="200dp"
+                android:layout_height="100dp" />
+            <Button
+                android:id="@+id/uploadButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Upload Photo"/>
+            <Button
+                android:id="@+id/postButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Post"/>
+
+        </LinearLayout>
+
+
+    </ScrollView>
+
+
+
+</android.support.constraint.ConstraintLayout>

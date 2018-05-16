@@ -28,7 +28,7 @@ public class LoginActivity extends AppCompatActivity implements FirebaseAuth.Aut
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        setTitle("Game Exchange");
+        //setTitle("Game Exchange");
 
         mLayout = findViewById(R.id.loginLayout);
 
