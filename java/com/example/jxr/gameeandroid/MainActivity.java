@@ -65,9 +65,9 @@ public class MainActivity extends AppCompatActivity
 
         FragmentManager fragmentManager = getFragmentManager();
 
-        Fragment firstFragment = new MainFragment();
+//        Fragment firstFragment = new MainFragment();
 
-        fragmentManager.beginTransaction().replace(R.id.content_frame, firstFragment).commit();
+        fragmentManager.beginTransaction().replace(R.id.content_frame, new MainFragment()).commit();
     }
 
     @Override

@@ -1,76 +1,56 @@
 package com.example.jxr.gameeandroid;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.support.annotation.LayoutRes;
+import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.Filter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+
 import java.util.ArrayList;
+import java.util.List;
 
-public class PostAdapter extends BaseAdapter {
-    private Context mCurrentContext;
-    private ArrayList<Post> mPostList;
-    private ArrayList<Post> mFilteredList;
-    private ArrayList<Bitmap> mImageList;
-    private PostFilter mFilter;
+public class PostAdapter extends ArrayAdapter<Post> {
+    private Activity context;
+    private int resource;
+    private List<Post> posts;
 
-    public PostAdapter(Context con, ArrayList<Post> posts, ArrayList<Bitmap> images) {
-        mCurrentContext = con;
-        mPostList = posts;
-        mImageList = images;
-        mFilteredList = mPostList;
+    public PostAdapter(@NonNull Activity context, @LayoutRes int resource, @NonNull List<Post> objects) {
+        super(context, resource, objects);
+        this.context = context;
+        this.resource = resource;
+        posts = objects;
     }
 
     @Override
-    public int getCount() {
-        return mPostList.size();
-    }
-
-    @Override
-    public Object getItem(int position) {
-        return mPostList.get(position);
-    }
-
-    @Override
-    public long getItemId(int position) {
-        return position;
-    }
-
-    @Override
-    public View getView(int position, View view, ViewGroup viewGroup) {
+    public View getView(int position, @NonNull View view, @NonNull ViewGroup viewGroup) {
         // check if view already exists
-        if (view == null) {
-            LayoutInflater inflater = (LayoutInflater) mCurrentContext
-                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            // create a list item based on layout definition
-            view = inflater.inflate(R.layout.list_item, null);
-        }
+        LayoutInflater inflater = context.getLayoutInflater();
 
-        // Assign values to the TextViews using Post Object
-        TextView titleView = (TextView) view.findViewById(R.id.post_title);
-        TextView systemView = (TextView) view.findViewById(R.id.post_system);
-        TextView regionView = (TextView) view.findViewById(R.id.post_region);
-        TextView priceView = (TextView) view.findViewById(R.id.post_price);
-        ImageView imageView = (ImageView) view.findViewById(R.id.post_image);
+        View v = inflater.inflate(resource, null);
+        TextView mTitle = (TextView) v.findViewById(R.id.post_title);
+        TextView mSystem = (TextView) v.findViewById(R.id.post_system);
+        TextView mRegion = (TextView) v.findViewById(R.id.post_region);
+        TextView mPrice = (TextView) v.findViewById(R.id.post_price);
+        ImageView mImage = (ImageView) v.findViewById(R.id.post_image);
 
-        titleView.setText(mPostList.get(position).getTitle());
-        systemView.setText(mPostList.get(position).getSystem());
-        regionView.setText(mPostList.get(position).getRegion());
-        priceView.setText(mPostList.get(position).getPrice());
-        if (mImageList.size() >= position + 1){
-            if (mImageList.get(position) != null) {
-                imageView.setImageBitmap(mImageList.get(position));
-            }
-        }
+        mTitle.setText(posts.get(position).getTitle());
+        mSystem.setText(posts.get(position).getSystem());
+        mRegion.setText(posts.get(position).getRegion());
+        mPrice.setText(posts.get(position).getPrice());
+        Glide.with(context).load(posts.get(position).getPic()).into(mImage);
 
 
-
-        return view;
+        return v;
     }
 
     private class PostFilter extends Filter {

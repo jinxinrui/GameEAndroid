@@ -1,6 +1,7 @@
 package com.example.jxr.gameeandroid;
 
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -8,6 +9,7 @@ import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -19,48 +21,36 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
 /**
  *
  */
-public class MainFragment extends Fragment {
+public class MainFragment extends Fragment implements AdapterView.OnItemClickListener {
 
     private ListView mListView;
     private PostAdapter mAdapter;
-    private DatabaseReference mDatabaseRef = FirebaseDatabase.getInstance().getReference();
-    private ArrayList<String> mImageURLs;
-    private FirebaseStorage mStorageRef = FirebaseStorage.getInstance();
-    private ArrayList<Bitmap> mImageList;
-    private ArrayList<Post> mPostList;
+    private DatabaseReference mDatabaseRef;
+    private List<Post> mPostList;
 
     View vMain;
 
-    public MainFragment() {
-        // Required empty public constructor
-    }
-
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         vMain = inflater.inflate(R.layout.fragment_main, container, false);
         mListView = (ListView) vMain.findViewById(R.id.postListView);
-        mImageList = new ArrayList<>();
-        mImageURLs = new ArrayList<>();
+        mDatabaseRef = FirebaseDatabase.getInstance().getReference();
+
         mPostList = new ArrayList<>();
-        mAdapter = new PostAdapter(getContext(), mPostList, mImageList);
-        mListView.setAdapter(mAdapter);
+        mListView.setOnItemClickListener(this);
+
         downloadImages();
 
         return vMain;
     }
-
-//    public void onStart() {
-//        super.onStart();
-//        downloadImages();
-//    }
 
     public void downloadImages() {
         DatabaseReference databaseReference = mDatabaseRef.child("posts");
@@ -68,32 +58,19 @@ public class MainFragment extends Fragment {
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                // fetch image data from firebase database
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    String url = snapshot.child("pic").getValue(String.class);
-                    String condition = snapshot.child("condition").getValue(String.class);
-                    String date = snapshot.child("date").getValue(String.class);
-                    String price = snapshot.child("price").getValue(String.class);
-                    String region = snapshot.child("region").getValue(String.class);
-                    String system = snapshot.child("system").getValue(String.class);
-                    String title = snapshot.child("title").getValue(String.class);
-                    String user = snapshot.child("user").getValue(String.class);
-                    Post newPost = new Post(condition, date, url, price, region, system, title, user);
-                    mPostList.add(newPost);
-
-                    if (!mImageURLs.contains(url) && url != null) {
-                        mImageURLs.add(url);
-                        mStorageRef.getReferenceFromUrl(url).getBytes(5 * 1024 *
-                                1024).addOnSuccessListener(new OnSuccessListener<byte[]>() {
-                            @Override
-                            public void onSuccess(byte[] bytes) {
-                                mImageList.add(BitmapFactory
-                                        .decodeByteArray(bytes, 0, bytes.length));
-                                mAdapter.notifyDataSetChanged();
-                            }
-                        });
-                    }
+                    // Post class require default constructor
+                    Post post = snapshot.getValue(Post.class);
+                    mPostList.add(post);
                 }
+                // init adapter
+                mAdapter = new PostAdapter(getActivity(), R.layout.list_item, mPostList);
+                // set adapter for listview
+                mListView.setAdapter(mAdapter);
             }
+
+
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
@@ -102,4 +79,11 @@ public class MainFragment extends Fragment {
         });
     }
 
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        Post post = mPostList.get(position);
+        Intent newIntent = new Intent(getContext(), PostDetailActivity.class);
+        newIntent.putExtra("selectedPost", post);
+        startActivity(newIntent);
+    }
 }

@@ -44,12 +44,13 @@ public class AddPostActivity extends AppCompatActivity implements View.OnClickLi
     private Button mUploadButton;
     private Button mPostButton;
     private ImageView mImageView;
-    private EditText mTitle;
+    private EditText mTitleText;
     private Spinner mSystemSpinner;
     private Spinner mRegionSpinner;
     private EditText mPriceText;
     private CheckBox mScrachesBox;
     private CheckBox mCaseBox;
+    private EditText mDescriptionText;
     private String url = "";
 
     private String userId;
@@ -69,12 +70,13 @@ public class AddPostActivity extends AppCompatActivity implements View.OnClickLi
 
 
         mImageView = (ImageView) findViewById(R.id.addPostPhoto);
-        mTitle = (EditText) findViewById(R.id.addTitleText);
+        mTitleText = (EditText) findViewById(R.id.addTitleText);
         mPriceText = (EditText) findViewById(R.id.addPriceText);
         mScrachesBox = (CheckBox) findViewById(R.id.checkBox1);
         mCaseBox = (CheckBox) findViewById(R.id.checkBox2);
         mSystemSpinner = (Spinner) findViewById(R.id.systemSpinner);
         mRegionSpinner = (Spinner) findViewById(R.id.regionSpinner);
+        mDescriptionText = (EditText) findViewById(R.id.addDescriptionText);
 
         mBrowseButton = (Button) findViewById(R.id.browseButton);
         mUploadButton = (Button) findViewById(R.id.uploadButton);
@@ -137,7 +139,7 @@ public class AddPostActivity extends AppCompatActivity implements View.OnClickLi
 
             case R.id.postButton:
                 // Validataion
-                if (mTitle.getText().toString().trim().isEmpty()) {
+                if (mTitleText.getText().toString().trim().isEmpty()) {
                     Toast.makeText(getApplicationContext(), "Title is not filled", Toast.LENGTH_LONG).show();
                 } else if (mPriceText.getText().toString().trim().isEmpty()) {
                     Toast.makeText(getApplicationContext(), "Price is not filled", Toast.LENGTH_LONG).show();
@@ -146,8 +148,9 @@ public class AddPostActivity extends AppCompatActivity implements View.OnClickLi
                     FirebaseDatabase database = FirebaseDatabase.getInstance();
                     DatabaseReference newRef = database.getReference().child("posts").push();
                     newRef.child("user").setValue(userId);
-                    newRef.child("title").setValue(mTitle.getText().toString());
+                    newRef.child("title").setValue(mTitleText.getText().toString());
                     newRef.child("price").setValue(mPriceText.getText().toString());
+                    newRef.child("description").setValue(mDescriptionText.getText().toString());
                     if (mScrachesBox.isChecked()) {
                         newRef.child("condition").setValue("new");
                     } else {
@@ -156,7 +159,7 @@ public class AddPostActivity extends AppCompatActivity implements View.OnClickLi
                     if (mCaseBox.isChecked()) {
                         newRef.child("case").setValue("true");
                     } else {
-                        newRef.child("case").setValue("false");
+                        //newRef.child("case").setValue("false");
                     }
                     newRef.child("system").setValue(mSystemSpinner.getSelectedItem().toString());
                     newRef.child("region").setValue(mRegionSpinner.getSelectedItem().toString());
@@ -165,6 +168,8 @@ public class AddPostActivity extends AppCompatActivity implements View.OnClickLi
                     String currentDate = dateFormat.format(date);
                     newRef.child("date").setValue(currentDate);
                     newRef.child("pic").setValue(url);
+                    String username = FirebaseAuth.getInstance().getCurrentUser().getDisplayName();
+                    newRef.child("username").setValue(username);
 
                     Toast.makeText(getApplicationContext(), "Post Complete", Toast.LENGTH_LONG).show();
 
