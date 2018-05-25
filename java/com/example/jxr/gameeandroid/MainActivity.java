@@ -25,19 +25,17 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private FirebaseAuth mAuth;
+    private FloatingActionButton fab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        //setSupportActionBar(toolbar);
-
-
 
         mAuth = FirebaseAuth.getInstance();
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -65,7 +63,7 @@ public class MainActivity extends AppCompatActivity
 
         FragmentManager fragmentManager = getFragmentManager();
 
-//        Fragment firstFragment = new MainFragment();
+        Fragment firstFragment = new MainFragment();
 
         fragmentManager.beginTransaction().replace(R.id.content_frame, new MainFragment()).commit();
     }
@@ -109,12 +107,19 @@ public class MainActivity extends AppCompatActivity
         Fragment nextFragment = null;
 
         switch (item.getItemId()) {
+            case R.id.nav_home:
+                nextFragment = new MainFragment();
+                break;
+
             case R.id.log_out:
                 mAuth.signOut();
                 Intent intent = new Intent(this, LoginActivity.class);
                 startActivity(intent);
                 break;
 
+            case R.id.nav_chat:
+                nextFragment = new ChannelListFragment();
+                break;
             default:
                 break;
         }
@@ -127,6 +132,11 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    // use to show or hide floating button in fragments
+    public FloatingActionButton getFloatingActionButton() {
+        return fab;
     }
 
 }

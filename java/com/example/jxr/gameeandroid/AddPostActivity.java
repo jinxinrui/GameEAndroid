@@ -1,7 +1,9 @@
 package com.example.jxr.gameeandroid;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -134,6 +136,8 @@ public class AddPostActivity extends AppCompatActivity implements View.OnClickLi
                             double progress = (100 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
                         }
                     });
+                } else {
+                    Toast.makeText(getApplicationContext(), "Please select an image", Toast.LENGTH_LONG).show();
                 }
                 break;
 
@@ -203,5 +207,18 @@ public class AddPostActivity extends AppCompatActivity implements View.OnClickLi
         ContentResolver contentResolver = getContentResolver();
         MimeTypeMap mimeTypeMap = MimeTypeMap.getSingleton();
         return mimeTypeMap.getExtensionFromMimeType(contentResolver.getType(uri));
+    }
+
+    public void onBackPressed() {
+        new AlertDialog.Builder(this)
+                .setTitle("Really Exit?")
+                .setMessage("Do you want to exit without saving?")
+                .setNegativeButton(android.R.string.no, null)
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        AddPostActivity.super.onBackPressed();
+                    }
+                }).create().show();
     }
 }

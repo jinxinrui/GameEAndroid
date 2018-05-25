@@ -26,7 +26,8 @@
             android:name=".RegisterActivity"
             android:theme="@style/AppTheme" />
         <activity android:name=".AddPostActivity" />
-        <activity android:name=".PostDetailActivity"></activity>
+        <activity android:name=".PostDetailActivity" />
+        <activity android:name=".ProfileActivity"></activity>
     </application>
 
 </manifest>

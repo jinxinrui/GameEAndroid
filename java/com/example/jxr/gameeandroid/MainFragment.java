@@ -2,23 +2,21 @@ package com.example.jxr.gameeandroid;
 
 
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.support.design.widget.FloatingActionButton;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
-import com.google.android.gms.tasks.OnSuccessListener;
+import com.example.jxr.gameeandroid.model.Post;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.storage.FirebaseStorage;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,17 +45,29 @@ public class MainFragment extends Fragment implements AdapterView.OnItemClickLis
         mPostList = new ArrayList<>();
         mListView.setOnItemClickListener(this);
 
-        downloadImages();
+        FloatingActionButton floatingActionButton = ((MainActivity) getActivity()).getFloatingActionButton();
+
+        // show floating button
+        if (floatingActionButton != null) {
+            floatingActionButton.show();
+        }
 
         return vMain;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        downloadImages();
     }
 
     public void downloadImages() {
         DatabaseReference databaseReference = mDatabaseRef.child("posts");
 
-        databaseReference.addValueEventListener(new ValueEventListener() {
+        ValueEventListener downloadListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                mPostList.clear();
                 // fetch image data from firebase database
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     // Post class require default constructor
@@ -76,7 +86,9 @@ public class MainFragment extends Fragment implements AdapterView.OnItemClickLis
             public void onCancelled(DatabaseError databaseError) {
 
             }
-        });
+        };
+        databaseReference.addListenerForSingleValueEvent(downloadListener);
+//        databaseReference.removeEventListener(downloadListener);
     }
 
     @Override
