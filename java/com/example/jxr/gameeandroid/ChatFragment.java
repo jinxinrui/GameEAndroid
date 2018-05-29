@@ -35,6 +35,7 @@ public class ChatFragment extends Fragment implements ValueEventListener {
         vMain = inflater.inflate(R.layout.fragment_channel_list, container, false);
 
 
+
         return vMain;
     }
 

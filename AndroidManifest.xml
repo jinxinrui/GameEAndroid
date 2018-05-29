@@ -27,7 +27,8 @@
             android:theme="@style/AppTheme" />
         <activity android:name=".AddPostActivity" />
         <activity android:name=".PostDetailActivity" />
-        <activity android:name=".ProfileActivity"></activity>
+        <activity android:name=".ProfileActivity" />
+        <activity android:name=".ChatActivity"></activity>
     </application>
 
 </manifest>

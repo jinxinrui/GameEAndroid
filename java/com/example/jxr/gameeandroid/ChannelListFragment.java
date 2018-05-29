@@ -3,6 +3,7 @@ package com.example.jxr.gameeandroid;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,6 +48,13 @@ public class ChannelListFragment extends Fragment implements AdapterView.OnItemC
         mAdapter = new ArrayAdapter<>(getContext(),
                 android.R.layout.simple_list_item_1, mChannelList);
         mChannelListView.setAdapter(mAdapter);
+
+        FloatingActionButton floatingActionButton = ((MainActivity) getActivity()).getFloatingActionButton();
+
+        // hide floating button
+        if (floatingActionButton != null) {
+            floatingActionButton.hide();
+        }
         return vMain;
     }
 
