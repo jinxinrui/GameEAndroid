@@ -1,6 +1,7 @@
 package com.example.jxr.gameeandroid;
 
 import android.content.Intent;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -59,6 +60,7 @@ public class ChatActivity extends AppCompatActivity implements ValueEventListene
         mRecyclerView.setLayoutManager(layoutManager);
         mRecyclerView.setAdapter(mAdapter);
 
+
         Button sendButton = findViewById(R.id.sendButton);
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -86,6 +88,14 @@ public class ChatActivity extends AppCompatActivity implements ValueEventListene
             mMessageList.add(tempMessage);
         }
         mAdapter.notifyDataSetChanged();
+
+        // automatically scroll to the bottom of the recyclerview when data added
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mRecyclerView.smoothScrollToPosition(mAdapter.getItemCount());
+            }
+        }, 1);
     }
 
     @Override
@@ -103,5 +113,13 @@ public class ChatActivity extends AppCompatActivity implements ValueEventListene
     public void onStop() {
         super.onStop();
         mDatabaseRef.removeEventListener(this);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.putExtra("goToChatFragment", "ok");
+        startActivity(intent);
     }
 }

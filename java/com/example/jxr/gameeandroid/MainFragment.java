@@ -19,6 +19,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 
@@ -74,6 +75,8 @@ public class MainFragment extends Fragment implements AdapterView.OnItemClickLis
                     Post post = snapshot.getValue(Post.class);
                     mPostList.add(post);
                 }
+                // reverse the post list
+                Collections.reverse(mPostList);
                 // init adapter
                 mAdapter = new PostAdapter(getActivity(), R.layout.list_item, mPostList);
                 // set adapter for listview

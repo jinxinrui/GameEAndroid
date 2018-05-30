@@ -2,6 +2,7 @@ package com.example.jxr.gameeandroid;
 
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.view.LayoutInflater;
@@ -38,16 +39,16 @@ public class ChannelListFragment extends Fragment implements AdapterView.OnItemC
         vMain = inflater.inflate(R.layout.fragment_channel_list, container, false);
         mChannelListView = (ListView) vMain.findViewById(R.id.channelListView);
 
-        String currentUser = FirebaseAuth.getInstance().getCurrentUser().toString();
+        String currentUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
-        //mDatabaseRef = FirebaseDatabase.getInstance().getReference().child("channels").child(currentUser);
-        mDatabaseRef = FirebaseDatabase.getInstance()
-                .getReference().child("channels");
+        mDatabaseRef = FirebaseDatabase.getInstance().getReference()
+                .child("profiles").child(currentUserId).child("channels");
 
         mChannelList = new ArrayList<>();
         mAdapter = new ArrayAdapter<>(getContext(),
                 android.R.layout.simple_list_item_1, mChannelList);
         mChannelListView.setAdapter(mAdapter);
+        mChannelListView.setOnItemClickListener(this);
 
         FloatingActionButton floatingActionButton = ((MainActivity) getActivity()).getFloatingActionButton();
 
@@ -55,15 +56,18 @@ public class ChannelListFragment extends Fragment implements AdapterView.OnItemC
         if (floatingActionButton != null) {
             floatingActionButton.hide();
         }
+
         return vMain;
     }
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Channel currentChannel = mChannelList.get(position);
-        Fragment fragment = new ChatFragment();
-        FragmentManager fragmentManager = getFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
+        Intent intent = new Intent(getContext(), ChatActivity.class);
+        intent.putExtra("channelId", currentChannel.mChannelID);
+        // channel name equals to otherUsername
+        intent.putExtra("otherUsername", currentChannel.mChannelName);
+        startActivity(intent);
     }
 
     @Override
@@ -71,8 +75,8 @@ public class ChannelListFragment extends Fragment implements AdapterView.OnItemC
         mChannelList.clear();
         for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
             Channel tempChannel = new Channel();
-            tempChannel.mChannelID = snapshot.getKey();
-            tempChannel.mChannelName = (String)snapshot.child("name").getValue();
+            tempChannel.mChannelID = snapshot.child("channelId").getValue().toString();
+            tempChannel.mChannelName = snapshot.child("otherUsername").getValue().toString();
             mChannelList.add(tempChannel);
         }
         mAdapter.notifyDataSetChanged();

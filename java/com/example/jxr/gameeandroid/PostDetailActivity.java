@@ -89,7 +89,7 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     if (snapshot.getKey().equals(ownerId)) {
                         userExist = true;
-                        channelId = snapshot.getValue().toString();
+                        channelId = snapshot.child("channelId").getValue().toString();
                     }
                 }
                 // if channel already exists, pass the channel id to the next activity
@@ -110,14 +110,22 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
                     channel.child(mPost.getUser()).setValue(currentUsername);
 
                     // current user profile
-                    DatabaseReference profile1 = FirebaseDatabase.getInstance().getReference().child("profiles")
-                            .child(currentUserId).child("channels");
-                    profile1.child(mPost.getUser()).setValue(channelId);
+                    DatabaseReference profile1 = FirebaseDatabase.getInstance().getReference()
+                            .child("profiles")
+                            .child(currentUserId)
+                            .child("channels");
+                    profile1.child(mPost.getUser()).child("channelId").setValue(channelId);
+                    profile1.child(mPost.getUser())
+                            .child("otherUsername")
+                            .setValue(mPost.getUsername());
 
                     // other user profile
-                    DatabaseReference profile2 = FirebaseDatabase.getInstance().getReference().child("profiles")
-                            .child(ownerId).child("channels");
-                    profile2.child(currentUserId).setValue(channelId);
+                    DatabaseReference profile2 = FirebaseDatabase.getInstance().getReference()
+                            .child("profiles")
+                            .child(ownerId)
+                            .child("channels");
+                    profile2.child(currentUserId).child("channelId").setValue(channelId);
+                    profile2.child(currentUserId).child("otherUsername").setValue(currentUsername);
                     Intent newIntent1 = new Intent(getApplicationContext(), ChatActivity.class);
                     newIntent1.putExtra("channelId", channelId);
                     newIntent1.putExtra("otherUsername", mPost.getUsername());

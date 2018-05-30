@@ -64,8 +64,12 @@ public class MainActivity extends AppCompatActivity
         FragmentManager fragmentManager = getFragmentManager();
 
         Fragment firstFragment = new MainFragment();
+        Intent intent = getIntent();
+        if (intent.getStringExtra("goToChatFragment") != null){
+            firstFragment = new ChannelListFragment();
+        }
 
-        fragmentManager.beginTransaction().replace(R.id.content_frame, new MainFragment()).commit();
+        fragmentManager.beginTransaction().replace(R.id.content_frame, firstFragment).commit();
     }
 
     @Override
