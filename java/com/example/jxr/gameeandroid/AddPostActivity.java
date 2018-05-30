@@ -9,8 +9,12 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.webkit.MimeTypeMap;
 import android.widget.Button;
@@ -44,7 +48,6 @@ public class AddPostActivity extends AppCompatActivity implements View.OnClickLi
     private Uri imgUri;
     private Button mBrowseButton;
     private Button mUploadButton;
-    private Button mPostButton;
     private ImageView mImageView;
     private EditText mTitleText;
     private Spinner mSystemSpinner;
@@ -63,13 +66,12 @@ public class AddPostActivity extends AppCompatActivity implements View.OnClickLi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_post);
+        setTitle("Adding Post");
 
         mStorageRef = FirebaseStorage.getInstance().getReference();
-        //mDatabaseRef = FirebaseDatabase.getInstance().getReference("image");
 
         // get user id.
         userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-
 
         mImageView = (ImageView) findViewById(R.id.addPostPhoto);
         mTitleText = (EditText) findViewById(R.id.addTitleText);
@@ -82,14 +84,11 @@ public class AddPostActivity extends AppCompatActivity implements View.OnClickLi
 
         mBrowseButton = (Button) findViewById(R.id.browseButton);
         mUploadButton = (Button) findViewById(R.id.uploadButton);
-        mPostButton = (Button) findViewById(R.id.postButton);
-
 
         mBrowseButton.setOnClickListener(this);
         mUploadButton.setOnClickListener(this);
-        mPostButton.setOnClickListener(this);
 
-
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     @Override
@@ -141,46 +140,6 @@ public class AddPostActivity extends AppCompatActivity implements View.OnClickLi
                 }
                 break;
 
-            case R.id.postButton:
-                // Validataion
-                if (mTitleText.getText().toString().trim().isEmpty()) {
-                    Toast.makeText(getApplicationContext(), "Title is not filled", Toast.LENGTH_LONG).show();
-                } else if (mPriceText.getText().toString().trim().isEmpty()) {
-                    Toast.makeText(getApplicationContext(), "Price is not filled", Toast.LENGTH_LONG).show();
-                } else {
-                    // upload to firebase
-                    FirebaseDatabase database = FirebaseDatabase.getInstance();
-                    DatabaseReference newRef = database.getReference().child("posts").push();
-                    newRef.child("user").setValue(userId);
-                    newRef.child("title").setValue(mTitleText.getText().toString());
-                    newRef.child("price").setValue(mPriceText.getText().toString());
-                    newRef.child("description").setValue(mDescriptionText.getText().toString());
-                    if (mScrachesBox.isChecked()) {
-                        newRef.child("condition").setValue("new");
-                    } else {
-                        newRef.child("condition").setValue("used");
-                    }
-                    if (mCaseBox.isChecked()) {
-                        newRef.child("case").setValue("true");
-                    } else {
-                        //newRef.child("case").setValue("false");
-                    }
-                    newRef.child("system").setValue(mSystemSpinner.getSelectedItem().toString());
-                    newRef.child("region").setValue(mRegionSpinner.getSelectedItem().toString());
-                    DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-                    Date date = new Date();
-                    String currentDate = dateFormat.format(date);
-                    newRef.child("date").setValue(currentDate);
-                    newRef.child("pic").setValue(url);
-                    String username = FirebaseAuth.getInstance().getCurrentUser().getDisplayName();
-                    newRef.child("username").setValue(username);
-
-                    Toast.makeText(getApplicationContext(), "Post Complete", Toast.LENGTH_LONG).show();
-
-                    Intent intent1 = new Intent(this, MainActivity.class);
-                    startActivity(intent1);
-                }
-                break;
             default:
                 break;
         }
@@ -221,4 +180,65 @@ public class AddPostActivity extends AppCompatActivity implements View.OnClickLi
                     }
                 }).create().show();
     }
+
+    // create menu
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_activity_add, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    // set action on menu item
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            // Respond to the action bar's Up/Home button
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+
+            case R.id.action_add:
+                // Validataion
+                if (mTitleText.getText().toString().trim().isEmpty()) {
+                    Toast.makeText(getApplicationContext(), "Title is not filled", Toast.LENGTH_LONG).show();
+                } else if (mPriceText.getText().toString().trim().isEmpty()) {
+                    Toast.makeText(getApplicationContext(), "Price is not filled", Toast.LENGTH_LONG).show();
+                } else {
+                    // upload to firebase
+                    FirebaseDatabase database = FirebaseDatabase.getInstance();
+                    DatabaseReference newRef = database.getReference().child("posts").push();
+                    newRef.child("user").setValue(userId);
+                    newRef.child("title").setValue(mTitleText.getText().toString());
+                    newRef.child("price").setValue(mPriceText.getText().toString());
+                    newRef.child("description").setValue(mDescriptionText.getText().toString());
+                    if (mScrachesBox.isChecked()) {
+                        newRef.child("condition").setValue("new");
+                    } else {
+                        newRef.child("condition").setValue("used");
+                    }
+                    if (mCaseBox.isChecked()) {
+                        newRef.child("case").setValue("true");
+                    } else {
+                        //newRef.child("case").setValue("false");
+                    }
+                    newRef.child("system").setValue(mSystemSpinner.getSelectedItem().toString());
+                    newRef.child("region").setValue(mRegionSpinner.getSelectedItem().toString());
+                    DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                    Date date = new Date();
+                    String currentDate = dateFormat.format(date);
+                    newRef.child("date").setValue(currentDate);
+                    newRef.child("pic").setValue(url);
+                    String username = FirebaseAuth.getInstance().getCurrentUser().getDisplayName();
+                    newRef.child("username").setValue(username);
+
+                    Toast.makeText(getApplicationContext(), "Post Complete", Toast.LENGTH_LONG).show();
+
+                    Intent intent1 = new Intent(this, MainActivity.class);
+                    startActivity(intent1);
+                }
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+
 }

@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -39,6 +40,7 @@ public class ChatActivity extends AppCompatActivity implements ValueEventListene
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         mUsername = FirebaseAuth.getInstance().getCurrentUser().getDisplayName();
         Intent intent = getIntent();
@@ -115,11 +117,20 @@ public class ChatActivity extends AppCompatActivity implements ValueEventListene
         mDatabaseRef.removeEventListener(this);
     }
 
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
+    public void goBackToChat() {
         Intent intent = new Intent(this, MainActivity.class);
         intent.putExtra("goToChatFragment", "ok");
         startActivity(intent);
+    }
+
+    // set back button on the action bar
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            // Respond to the action bar's Up/Home button
+            case android.R.id.home:
+                goBackToChat();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

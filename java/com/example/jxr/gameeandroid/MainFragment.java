@@ -73,6 +73,7 @@ public class MainFragment extends Fragment implements AdapterView.OnItemClickLis
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     // Post class require default constructor
                     Post post = snapshot.getValue(Post.class);
+                    post.setPostId(snapshot.getKey()); // used to identify and delete the selected post
                     mPostList.add(post);
                 }
                 // reverse the post list

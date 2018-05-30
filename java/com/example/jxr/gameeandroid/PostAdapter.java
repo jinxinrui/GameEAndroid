@@ -40,10 +40,10 @@ public class PostAdapter extends ArrayAdapter<Post> {
         TextView mPrice = (TextView) v.findViewById(R.id.post_price);
         ImageView mImage = (ImageView) v.findViewById(R.id.post_image);
 
-        mTitle.setText(posts.get(position).getTitle());
-        mSystem.setText(posts.get(position).getSystem());
-        mRegion.setText(posts.get(position).getRegion());
-        mPrice.setText(posts.get(position).getPrice());
+        mTitle.setText("Title: " + posts.get(position).getTitle());
+        mSystem.setText("System: " + posts.get(position).getSystem());
+        mRegion.setText("Region: " + posts.get(position).getRegion());
+        mPrice.setText("Price: " + posts.get(position).getPrice());
         Glide.with(context).load(posts.get(position).getPic()).into(mImage);
 
 

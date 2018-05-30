@@ -1,10 +1,15 @@
 package com.example.jxr.gameeandroid;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -33,6 +38,7 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post_detail);
+        setTitle("Detail");
 
         // init ui items
         TextView mTitle = (TextView) findViewById(R.id.detail_title);
@@ -42,7 +48,7 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
         TextView mCondition = (TextView) findViewById(R.id.detail_condition);
         TextView mDescription = (TextView) findViewById(R.id.detail_descr);
         ImageView mImage = (ImageView) findViewById(R.id.detail_img);
-        final TextView mOwner = (TextView) findViewById(R.id.detail_owner);
+        TextView mOwner = (TextView) findViewById(R.id.detail_owner);
         Button chatButton = (Button) findViewById(R.id.detail_chat_btn);
 
         // get Post object from main fragment
@@ -139,6 +145,45 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
 
             }
         });
+    }
+
+    // create menu
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_activity_detail, menu);
+        // hide the delete menu item if the post does not belong to the current user
+        if (!currentUserId.equals(mPost.getUser())) {
+            MenuItem item = menu.findItem(R.id.action_delete);
+            item.setVisible(false);
+        }
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    // set action on menu item
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_delete:
+                // show dialogue to confirm the deletion of the post
+                new AlertDialog.Builder(this)
+                        .setTitle("Delete Confirmation!")
+                        .setMessage("Are you sure to delete this post? It will be deleted permanently.")
+                        .setNegativeButton(android.R.string.no, null)
+                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+//                                PostDetailActivity.super.onBackPressed();
+                                // delete the selected post
+                                DatabaseReference databaseRef = FirebaseDatabase.getInstance().getReference()
+                                        .child("posts").child(mPost.getPostId());
+                                databaseRef.removeValue();
+                                // nav back to the list view fragment
+                                onBackPressed();
+                            }
+                        }).create().show();
+
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
 

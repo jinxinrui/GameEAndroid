@@ -21,7 +21,8 @@
                 android:layout_height="wrap_content"
                 android:text="Title:"
                 android:textSize="18sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:padding="8dp"/>
 
             <EditText
                 android:id="@+id/addTitleText"
@@ -29,7 +30,8 @@
                 android:layout_height="wrap_content"
                 android:ems="10"
                 android:hint="Title"
-                android:inputType="textPersonName" />
+                android:inputType="textPersonName"
+                android:padding="8dp"/>
 
             <TextView
                 android:id="@+id/textView8"
@@ -39,12 +41,13 @@
                 android:textSize="18sp"
                 android:textStyle="bold"
                 tools:layout_editor_absoluteX="16dp"
-                tools:layout_editor_absoluteY="94dp" />
+                tools:layout_editor_absoluteY="94dp"
+                android:padding="8dp"/>
             <Spinner
                 android:id="@+id/systemSpinner"
                 android:layout_width="200dp"
                 android:layout_height="30dp"
-                android:entries="@array/consoleSystemOptions"/>
+                android:entries="@array/consoleSystemOptions" />
 
             <TextView
                 android:id="@+id/textView11"
@@ -54,7 +57,8 @@
                 android:textSize="18sp"
                 android:textStyle="bold"
                 tools:layout_editor_absoluteX="16dp"
-                tools:layout_editor_absoluteY="156dp" />
+                tools:layout_editor_absoluteY="156dp"
+                android:padding="8dp"/>
 
             <Spinner
                 android:id="@+id/regionSpinner"
@@ -62,7 +66,7 @@
                 android:layout_height="30dp"
                 tools:layout_editor_absoluteX="16dp"
                 tools:layout_editor_absoluteY="200dp"
-                android:entries="@array/regionOptions"/>
+                android:entries="@array/regionOptions" />
 
             <TextView
                 android:id="@+id/textView12"
@@ -72,7 +76,8 @@
                 android:textSize="18sp"
                 android:textStyle="bold"
                 tools:layout_editor_absoluteX="16dp"
-                tools:layout_editor_absoluteY="245dp" />
+                tools:layout_editor_absoluteY="245dp"
+                android:padding="8dp"/>
 
             <EditText
                 android:id="@+id/addPriceText"
@@ -81,7 +86,8 @@
                 android:ems="10"
                 android:inputType="numberDecimal"
                 tools:layout_editor_absoluteX="84dp"
-                tools:layout_editor_absoluteY="245dp" />
+                tools:layout_editor_absoluteY="245dp"
+                android:padding="8dp"/>
 
             <CheckBox
                 android:id="@+id/checkBox1"
@@ -89,7 +95,8 @@
                 android:layout_height="wrap_content"
                 android:text="Scratches"
                 tools:layout_editor_absoluteX="16dp"
-                tools:layout_editor_absoluteY="306dp" />
+                tools:layout_editor_absoluteY="306dp"
+                android:padding="8dp"/>
 
             <CheckBox
                 android:id="@+id/checkBox2"
@@ -97,12 +104,14 @@
                 android:layout_height="wrap_content"
                 android:text="With Case"
                 tools:layout_editor_absoluteX="16dp"
-                tools:layout_editor_absoluteY="354dp" />
+                tools:layout_editor_absoluteY="354dp"
+                android:padding="8dp"/>
             <Button
                 android:id="@+id/browseButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Browse Photo"/>
+                android:text="Browse Photo"
+                android:padding="8dp"/>
 
             <ImageView
                 android:id="@+id/addPostPhoto"
@@ -120,20 +129,16 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Description:"
-                android:textSize="24sp" />
+                android:textSize="24sp"
+                android:padding="8dp"/>
 
             <EditText
                 android:id="@+id/addDescriptionText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
-                android:inputType="textMultiLine" />
-
-            <Button
-                android:id="@+id/postButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Post" />
+                android:inputType="textMultiLine"
+                android:padding="8dp"/>
 
         </LinearLayout>
 
