@@ -46,8 +46,7 @@ public class AddPostActivity extends AppCompatActivity implements View.OnClickLi
     private StorageReference mStorageRef;
     private DatabaseReference mDatabaseRef;
     private Uri imgUri;
-    private Button mBrowseButton;
-    private Button mUploadButton;
+
     private ImageView mImageView;
     private EditText mTitleText;
     private Spinner mSystemSpinner;
@@ -82,62 +81,21 @@ public class AddPostActivity extends AppCompatActivity implements View.OnClickLi
         mRegionSpinner = (Spinner) findViewById(R.id.regionSpinner);
         mDescriptionText = (EditText) findViewById(R.id.addDescriptionText);
 
-        mBrowseButton = (Button) findViewById(R.id.browseButton);
-        mUploadButton = (Button) findViewById(R.id.uploadButton);
-
-        mBrowseButton.setOnClickListener(this);
-        mUploadButton.setOnClickListener(this);
+        mImageView.setOnClickListener(this);
+        mImageView.setImageResource(R.drawable.ic_add_black_12dp);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.browseButton:
-                Intent intent = new Intent();
-                intent.setType("image/*");
-                intent.setAction(Intent.ACTION_GET_CONTENT);
-                startActivityForResult(Intent.createChooser(intent, "select image"), REQUEST_CODE);
-                break;
-            case R.id.uploadButton:
-                if (imgUri != null) {
-                    final ProgressDialog dialog = new ProgressDialog(this);
-                    dialog.setTitle("Upload Image");
-                    dialog.show();
-
-
-                    StorageReference ref = mStorageRef.child(userId).child("image/" + System.currentTimeMillis() + "."
-                            + getImageExt(imgUri));
-                    // store image to the storage
-                    ref.putFile(imgUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                        @Override
-                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                            // dismiss dialog when success
-                            dialog.dismiss();
-                            // Display error toast message
-                            Toast.makeText(getApplicationContext(), "Image uploaded", Toast.LENGTH_LONG).show();
-
-                            // save image info to firebase database
-                            // save url info
-                            url = taskSnapshot.getDownloadUrl().toString();
-                        }
-                    }).addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            // dismiss dialog when error
-                            Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
-                        }
-                    }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
-                        @Override
-                        public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
-                            // show upload progress bar
-                            double progress = (100 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
-                        }
-                    });
-                } else {
-                    Toast.makeText(getApplicationContext(), "Please select an image", Toast.LENGTH_LONG).show();
-                }
+            case R.id.addPostPhoto:
+                Intent intent1 = new Intent();
+                intent1.setType("image/*");
+                intent1.setAction(Intent.ACTION_GET_CONTENT);
+                startActivityForResult(Intent.createChooser(intent1, "select image"), REQUEST_CODE);
                 break;
 
             default:
@@ -195,7 +153,7 @@ public class AddPostActivity extends AppCompatActivity implements View.OnClickLi
             case android.R.id.home:
                 onBackPressed();
                 return true;
-
+            // "done" button on action bar
             case R.id.action_add:
                 // Validataion
                 if (mTitleText.getText().toString().trim().isEmpty()) {
@@ -203,37 +161,71 @@ public class AddPostActivity extends AppCompatActivity implements View.OnClickLi
                 } else if (mPriceText.getText().toString().trim().isEmpty()) {
                     Toast.makeText(getApplicationContext(), "Price is not filled", Toast.LENGTH_LONG).show();
                 } else {
-                    // upload to firebase
-                    FirebaseDatabase database = FirebaseDatabase.getInstance();
-                    DatabaseReference newRef = database.getReference().child("posts").push();
-                    newRef.child("user").setValue(userId);
-                    newRef.child("title").setValue(mTitleText.getText().toString());
-                    newRef.child("price").setValue(mPriceText.getText().toString());
-                    newRef.child("description").setValue(mDescriptionText.getText().toString());
-                    if (mScrachesBox.isChecked()) {
-                        newRef.child("condition").setValue("new");
-                    } else {
-                        newRef.child("condition").setValue("used");
-                    }
-                    if (mCaseBox.isChecked()) {
-                        newRef.child("case").setValue("true");
-                    } else {
-                        //newRef.child("case").setValue("false");
-                    }
-                    newRef.child("system").setValue(mSystemSpinner.getSelectedItem().toString());
-                    newRef.child("region").setValue(mRegionSpinner.getSelectedItem().toString());
-                    DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-                    Date date = new Date();
-                    String currentDate = dateFormat.format(date);
-                    newRef.child("date").setValue(currentDate);
-                    newRef.child("pic").setValue(url);
-                    String username = FirebaseAuth.getInstance().getCurrentUser().getDisplayName();
-                    newRef.child("username").setValue(username);
+                    if (imgUri != null) {
+                        final ProgressDialog dialog = new ProgressDialog(this);
+                        dialog.setTitle("Sending Post");
+                        dialog.show();
+                        StorageReference ref = mStorageRef.child(userId).child("image/" + System.currentTimeMillis() + "."
+                                + getImageExt(imgUri));
+                        // store image to the Firebase storage
+                        ref.putFile(imgUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                            @Override
+                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                // dismiss dialog when success
+                                dialog.dismiss();
 
-                    Toast.makeText(getApplicationContext(), "Post Complete", Toast.LENGTH_LONG).show();
+                                // save image info to Firebase database
+                                // save url info
+                                url = taskSnapshot.getDownloadUrl().toString();
 
-                    Intent intent1 = new Intent(this, MainActivity.class);
-                    startActivity(intent1);
+                                // upload to firebase database
+                                FirebaseDatabase database = FirebaseDatabase.getInstance();
+                                DatabaseReference newRef = database.getReference().child("posts").push();
+                                newRef.child("user").setValue(userId);
+                                newRef.child("title").setValue(mTitleText.getText().toString());
+                                newRef.child("price").setValue(mPriceText.getText().toString());
+                                newRef.child("description").setValue(mDescriptionText.getText().toString());
+                                if (mScrachesBox.isChecked()) {
+                                    newRef.child("condition").setValue("new");
+                                } else {
+                                    newRef.child("condition").setValue("used");
+                                }
+                                if (mCaseBox.isChecked()) {
+                                    newRef.child("case").setValue("true");
+                                } else {
+                                    //newRef.child("case").setValue("false");
+                                }
+                                newRef.child("system").setValue(mSystemSpinner.getSelectedItem().toString());
+                                newRef.child("region").setValue(mRegionSpinner.getSelectedItem().toString());
+                                DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                                Date date = new Date();
+                                String currentDate = dateFormat.format(date);
+                                newRef.child("date").setValue(currentDate);
+                                newRef.child("pic").setValue(url);
+                                String username = FirebaseAuth.getInstance().getCurrentUser().getDisplayName();
+                                newRef.child("username").setValue(username);
+
+                                Toast.makeText(getApplicationContext(), "Post sent successfully.", Toast.LENGTH_LONG).show();
+
+                                Intent intent1 = new Intent(getApplicationContext(), MainActivity.class);
+                                startActivity(intent1);
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                // dismiss dialog when error
+                                Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+                            }
+                        }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                            @Override
+                            public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+                                // show upload progress bar
+                                double progress = (100 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
+                            }
+                        });
+                    } else {
+                        Toast.makeText(getApplicationContext(), "Please select an image", Toast.LENGTH_LONG).show();
+                    }
                 }
                 break;
         }

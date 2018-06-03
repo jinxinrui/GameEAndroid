@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
@@ -31,7 +31,8 @@
                 android:ems="10"
                 android:hint="Title"
                 android:inputType="textPersonName"
-                android:padding="8dp"/>
+                android:padding="8dp"
+                android:layout_below="@+id/textView10" />
 
             <TextView
                 android:id="@+id/textView8"
@@ -42,12 +43,14 @@
                 android:textStyle="bold"
                 tools:layout_editor_absoluteX="16dp"
                 tools:layout_editor_absoluteY="94dp"
-                android:padding="8dp"/>
+                android:padding="8dp"
+                android:layout_below="@+id/addTitleText" />
             <Spinner
                 android:id="@+id/systemSpinner"
-                android:layout_width="200dp"
+                android:layout_width="match_parent"
                 android:layout_height="30dp"
-                android:entries="@array/consoleSystemOptions" />
+                android:entries="@array/consoleSystemOptions"
+                android:layout_below="@id/textView8" />
 
             <TextView
                 android:id="@+id/textView11"
@@ -58,15 +61,17 @@
                 android:textStyle="bold"
                 tools:layout_editor_absoluteX="16dp"
                 tools:layout_editor_absoluteY="156dp"
-                android:padding="8dp"/>
+                android:padding="8dp"
+                android:layout_below="@id/systemSpinner" />
 
             <Spinner
                 android:id="@+id/regionSpinner"
-                android:layout_width="200dp"
+                android:layout_width="match_parent"
                 android:layout_height="30dp"
                 tools:layout_editor_absoluteX="16dp"
                 tools:layout_editor_absoluteY="200dp"
-                android:entries="@array/regionOptions" />
+                android:entries="@array/regionOptions"
+                android:layout_below="@+id/textView11"/>
 
             <TextView
                 android:id="@+id/textView12"
@@ -77,7 +82,8 @@
                 android:textStyle="bold"
                 tools:layout_editor_absoluteX="16dp"
                 tools:layout_editor_absoluteY="245dp"
-                android:padding="8dp"/>
+                android:padding="8dp"
+                android:layout_below="@id/regionSpinner"/>
 
             <EditText
                 android:id="@+id/addPriceText"
@@ -87,7 +93,8 @@
                 android:inputType="numberDecimal"
                 tools:layout_editor_absoluteX="84dp"
                 tools:layout_editor_absoluteY="245dp"
-                android:padding="8dp"/>
+                android:paddingLeft="8dp"
+                android:layout_below="@id/textView12"/>
 
             <CheckBox
                 android:id="@+id/checkBox1"
@@ -96,7 +103,8 @@
                 android:text="Scratches"
                 tools:layout_editor_absoluteX="16dp"
                 tools:layout_editor_absoluteY="306dp"
-                android:padding="8dp"/>
+                android:padding="8dp"
+                android:layout_below="@id/addPriceText" />
 
             <CheckBox
                 android:id="@+id/checkBox2"
@@ -105,24 +113,29 @@
                 android:text="With Case"
                 tools:layout_editor_absoluteX="16dp"
                 tools:layout_editor_absoluteY="354dp"
-                android:padding="8dp"/>
-            <Button
-                android:id="@+id/browseButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Browse Photo"
-                android:padding="8dp"/>
+                android:padding="8dp"
+                android:layout_below="@+id/checkBox1" />
+            <!--<Button-->
+                <!--android:id="@+id/browseButton"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:text="Browse Photo"-->
+                <!--android:padding="8dp"-->
+                <!--android:layout_below="@id/checkBox2"-->
+                <!--android:layout_centerInParent="true"/>-->
 
             <ImageView
                 android:id="@+id/addPostPhoto"
                 android:layout_width="150dp"
                 android:layout_height="100dp"
-                android:scaleType="fitCenter" />
-            <Button
-                android:id="@+id/uploadButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Upload Photo"/>
+                android:scaleType="fitCenter"
+                android:layout_below="@id/checkBox2"/>
+            <!--<Button-->
+                <!--android:id="@+id/uploadButton"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:text="Upload Photo"-->
+                <!--android:layout_below="@id/addPostPhoto"/>-->
 
             <TextView
                 android:id="@+id/textView7"
@@ -130,7 +143,8 @@
                 android:layout_height="wrap_content"
                 android:text="Description:"
                 android:textSize="24sp"
-                android:padding="8dp"/>
+                android:padding="8dp"
+                android:layout_below="@id/addPostPhoto"/>
 
             <EditText
                 android:id="@+id/addDescriptionText"
@@ -138,9 +152,10 @@
                 android:layout_height="wrap_content"
                 android:ems="10"
                 android:inputType="textMultiLine"
-                android:padding="8dp"/>
+                android:padding="8dp"
+                android:layout_below="@id/textView7"/>
 
-        </LinearLayout>
+        </RelativeLayout>
 
 
     </ScrollView>

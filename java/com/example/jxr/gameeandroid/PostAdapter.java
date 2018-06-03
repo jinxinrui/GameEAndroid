@@ -8,24 +8,31 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.jxr.gameeandroid.model.Post;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class PostAdapter extends ArrayAdapter<Post> {
+public class PostAdapter extends ArrayAdapter<Post> implements Filterable {
     private Activity context;
     private int resource;
-    private List<Post> posts;
+    private List<Post> postList;
+    private List<Post> mFilteredList;
+
+    private PostFilter mFilter;
 
     public PostAdapter(@NonNull Activity context, @LayoutRes int resource, @NonNull List<Post> objects) {
         super(context, resource, objects);
         this.context = context;
         this.resource = resource;
-        posts = objects;
+        postList = objects;
+        // for searching
+        mFilteredList = postList;
     }
 
     @Override
@@ -40,11 +47,11 @@ public class PostAdapter extends ArrayAdapter<Post> {
         TextView mPrice = (TextView) v.findViewById(R.id.post_price);
         ImageView mImage = (ImageView) v.findViewById(R.id.post_image);
 
-        mTitle.setText("Title: " + posts.get(position).getTitle());
-        mSystem.setText("System: " + posts.get(position).getSystem());
-        mRegion.setText("Region: " + posts.get(position).getRegion());
-        mPrice.setText("Price: " + posts.get(position).getPrice());
-        Glide.with(context).load(posts.get(position).getPic()).into(mImage);
+        mTitle.setText("Title: " + mFilteredList.get(position).getTitle());
+        mSystem.setText("System: " + mFilteredList.get(position).getSystem());
+        mRegion.setText("Region: " + mFilteredList.get(position).getRegion());
+        mPrice.setText("Price: " + mFilteredList.get(position).getPrice());
+        Glide.with(context).load(mFilteredList.get(position).getPic()).into(mImage);
 
 
         return v;
@@ -54,12 +61,49 @@ public class PostAdapter extends ArrayAdapter<Post> {
 
         @Override
         protected FilterResults performFiltering(CharSequence constraint) {
-            return null;
+            FilterResults results = new FilterResults();
+            if (constraint != null && constraint.length() > 0) {
+                ArrayList<Post> tempList = new ArrayList<>();
+                for (Post post : postList) {
+                    if (post.getTitle().toLowerCase().contains(constraint.toString().toLowerCase()))
+                        tempList.add(post);
+                }
+                results.count = tempList.size();
+                results.values = tempList;
+            } else {
+              results.count = postList.size();
+              results.values = postList;
+            }
+            return results;
         }
 
         @Override
         protected void publishResults(CharSequence constraint, FilterResults results) {
-
+            mFilteredList = (ArrayList<Post>) results.values;
+            notifyDataSetChanged();
         }
+    }
+
+    public Filter getFilter() {
+        if (mFilter == null) {
+            mFilter = new PostFilter();
+        }
+        return mFilter;
+    }
+
+    // ensure that the index not exceed the bound
+    @Override
+    public int getCount() {
+        return mFilteredList.size();
+    }
+
+    // return the OnItemClick item
+    @Override
+    public Post getItem(int i) {
+        return mFilteredList.get(i);
+    }
+
+    public long getItemId(int i) {
+        return i;
     }
 }

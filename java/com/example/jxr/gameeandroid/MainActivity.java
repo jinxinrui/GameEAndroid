@@ -32,6 +32,8 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        // replace actionbar with toolbar
+        setSupportActionBar(toolbar);
 
         mAuth = FirebaseAuth.getInstance();
 
@@ -65,6 +67,8 @@ public class MainActivity extends AppCompatActivity
 
         Fragment firstFragment = new MainFragment();
         Intent intent = getIntent();
+
+        // if it is navigate from PostDetailActivity to ChatActivity
         if (intent.getStringExtra("goToChatFragment") != null){
             firstFragment = new ChannelListFragment();
         }

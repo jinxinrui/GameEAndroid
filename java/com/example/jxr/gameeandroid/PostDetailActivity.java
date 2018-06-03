@@ -74,6 +74,8 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
         if (currentUserId.equals(ownerId)) {
             chatButton.setVisibility(View.INVISIBLE);
         }
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     public void onStop() {
@@ -162,6 +164,9 @@ public class PostDetailActivity extends AppCompatActivity implements View.OnClic
     // set action on menu item
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
             case R.id.action_delete:
                 // show dialogue to confirm the deletion of the post
                 new AlertDialog.Builder(this)
