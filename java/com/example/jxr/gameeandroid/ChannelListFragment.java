@@ -22,6 +22,11 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
+/**
+ * display the list of chat rooms that
+ * belongs to the current logged-on user
+ */
+
 public class ChannelListFragment extends Fragment implements AdapterView.OnItemClickListener, ValueEventListener {
 
     private String mUserName;
@@ -32,10 +37,20 @@ public class ChannelListFragment extends Fragment implements AdapterView.OnItemC
 
     private DatabaseReference mDatabaseRef;
 
+
     View vMain;
+
+    // display menu in fragment
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        getActivity().setTitle("Chat Room");
+
         vMain = inflater.inflate(R.layout.fragment_channel_list, container, false);
         mChannelListView = (ListView) vMain.findViewById(R.id.channelListView);
 
@@ -56,6 +71,8 @@ public class ChannelListFragment extends Fragment implements AdapterView.OnItemC
         if (floatingActionButton != null) {
             floatingActionButton.hide();
         }
+
+
 
         return vMain;
     }

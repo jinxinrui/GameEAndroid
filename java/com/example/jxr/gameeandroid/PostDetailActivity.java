@@ -25,6 +25,11 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+/**
+ * activity to modify the info
+ * of user profile
+ */
+
 public class PostDetailActivity extends AppCompatActivity implements View.OnClickListener {
 
     private Post mPost;

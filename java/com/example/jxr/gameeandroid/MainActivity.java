@@ -3,10 +3,9 @@ package com.example.jxr.gameeandroid;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.text.Layout;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -16,11 +15,16 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
 
+/**
+ * MainActivity contains the main framework or each fragment
+ * Maintain the navigation to each fragment
+ */
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -61,6 +65,13 @@ public class MainActivity extends AppCompatActivity
         View headerView = navigationView.getHeaderView(0);
         TextView mTextView = (TextView) headerView.findViewById(R.id.textView);
         mTextView.setText(mAuth.getCurrentUser().getDisplayName());
+
+        // display user profile photo on nav drawer header
+        Uri photoUrl = FirebaseAuth.getInstance().getCurrentUser().getPhotoUrl();
+        if (photoUrl != null) {
+            ImageView headerPhoto = (ImageView) headerView.findViewById(R.id.headerPhoto);
+            Glide.with(this).load(photoUrl).into(headerPhoto);
+        }
 
 
         FragmentManager fragmentManager = getFragmentManager();
@@ -128,6 +139,11 @@ public class MainActivity extends AppCompatActivity
             case R.id.nav_chat:
                 nextFragment = new ChannelListFragment();
                 break;
+
+            case R.id.nav_profile:
+                nextFragment = new MyProfileFragment();
+                break;
+
             default:
                 break;
         }

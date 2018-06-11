@@ -79,6 +79,9 @@ public class ChatActivity extends AppCompatActivity implements ValueEventListene
         });
     }
 
+    /**
+     * listener on chat messages
+     */
     @Override
     public void onDataChange(DataSnapshot dataSnapshot) {
         mMessageList.clear();
@@ -111,19 +114,28 @@ public class ChatActivity extends AppCompatActivity implements ValueEventListene
         mDatabaseRef.addValueEventListener(this);
     }
 
+    /**
+     * remove listener when leaving this
+     * activity
+     */
     @Override
     public void onStop() {
         super.onStop();
         mDatabaseRef.removeEventListener(this);
     }
 
+    /**
+     * action of menu item
+     */
     public void goBackToChat() {
         Intent intent = new Intent(this, MainActivity.class);
         intent.putExtra("goToChatFragment", "ok");
         startActivity(intent);
     }
 
-    // set back button on the action bar
+    /**
+     * set item on menu
+     */
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             // Respond to the action bar's Up/Home button

@@ -40,7 +40,10 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-
+/**
+ * activity to maintain the add post and upload
+ * photo function
+ */
 public class AddPostActivity extends AppCompatActivity implements View.OnClickListener {
 
     private StorageReference mStorageRef;
@@ -126,6 +129,11 @@ public class AddPostActivity extends AppCompatActivity implements View.OnClickLi
         return mimeTypeMap.getExtensionFromMimeType(contentResolver.getType(uri));
     }
 
+    /**
+     * customized onBackpressed fucntion
+     * to prevent accidently hit on back
+     * button
+     */
     public void onBackPressed() {
         new AlertDialog.Builder(this)
                 .setTitle("Really Exit?")
@@ -156,10 +164,18 @@ public class AddPostActivity extends AppCompatActivity implements View.OnClickLi
             // "done" button on action bar
             case R.id.action_add:
                 // Validataion
-                if (mTitleText.getText().toString().trim().isEmpty()) {
+                String title = "";
+                String price = "";
+                title = mTitleText.getText().toString().trim();
+                price = mPriceText.getText().toString().trim();
+                if (title.isEmpty()) {
                     Toast.makeText(getApplicationContext(), "Title is not filled", Toast.LENGTH_LONG).show();
-                } else if (mPriceText.getText().toString().trim().isEmpty()) {
+                } else if (!isValidTitle(title)){
+                    Toast.makeText(getApplicationContext(), "Title should be less than 15 characters", Toast.LENGTH_SHORT).show();
+                } else if (price.toString().trim().isEmpty()) {
                     Toast.makeText(getApplicationContext(), "Price is not filled", Toast.LENGTH_LONG).show();
+                } else if (!isValidPrice(price)) {
+                    Toast.makeText(getApplicationContext(), "Price should be less within 0-10000", Toast.LENGTH_SHORT).show();
                 } else {
                     if (imgUri != null) {
                         final ProgressDialog dialog = new ProgressDialog(this);
@@ -232,5 +248,24 @@ public class AddPostActivity extends AppCompatActivity implements View.OnClickLi
         return super.onOptionsItemSelected(item);
     }
 
+    // validate the input price
+    public static boolean isValidPrice(String price) {
+        boolean flag = true;
+        if (!price.matches("[0-9]+")) {
+            flag = false;
+        } else if (price.matches(("[0-9]+"))) {
+            if (Integer.parseInt(price) > 10000 || Integer.parseInt(price) <= 0)
+                flag = false;
+        }
+        return flag;
+    }
 
+    //validate the input title
+    public static boolean isValidTitle(String title) {
+        boolean flag = true;
+        if (title.trim().length() > 15) {
+            flag = false;
+        }
+        return flag;
+    }
 }

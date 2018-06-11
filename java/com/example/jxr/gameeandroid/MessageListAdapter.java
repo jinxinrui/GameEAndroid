@@ -14,6 +14,11 @@ import com.example.jxr.gameeandroid.model.Message;
 
 import java.util.ArrayList;
 
+/**
+ * adapter to organize the chat messages
+ * between pairs of users
+ */
+
 public class MessageListAdapter extends RecyclerView.Adapter {
 
     private static final int VIEW_TYPE_SENT = 1;

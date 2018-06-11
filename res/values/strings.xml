@@ -23,6 +23,7 @@
         <item>AU</item>
         <item>RU</item>
     </string-array>
+
     <string name="title_activity_settings">Settings</string>
 
     <!-- Strings related to Settings -->

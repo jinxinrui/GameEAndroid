@@ -25,7 +25,8 @@
         app:layout_constraintBottom_toTopOf="@+id/loginPassword"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.503"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        android:imeOptions="actionNext" />
 
     <EditText
         android:id="@+id/loginPassword"
@@ -40,7 +41,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/loginUsername"
         app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="@+id/loginUsername" />
+        app:layout_constraintStart_toStartOf="@+id/loginUsername"
+        android:imeOptions="actionDone" />
 
     <Button
         android:id="@+id/loginButton"

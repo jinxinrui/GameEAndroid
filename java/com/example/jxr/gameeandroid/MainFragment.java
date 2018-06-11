@@ -32,7 +32,8 @@ import java.util.List;
 
 
 /**
- *
+ * display the list view of ads that
+ * have been posted
  */
 public class MainFragment extends Fragment implements AdapterView.OnItemClickListener, SearchView.OnQueryTextListener {
 
@@ -44,6 +45,7 @@ public class MainFragment extends Fragment implements AdapterView.OnItemClickLis
 
     View vMain;
 
+    // display menu in fragment
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,6 +68,10 @@ public class MainFragment extends Fragment implements AdapterView.OnItemClickLis
         if (floatingActionButton != null) {
             floatingActionButton.show();
         }
+
+        // change the toolbar title
+//        ((MainActivity) getActivity()).getSupportActionBar().setTitle("Home");
+        getActivity().setTitle("Home");
 
         return vMain;
     }
@@ -106,7 +112,7 @@ public class MainFragment extends Fragment implements AdapterView.OnItemClickLis
 
             }
         };
-        databaseReference.addListenerForSingleValueEvent(downloadListener);
+        databaseReference.addValueEventListener(downloadListener);
     }
 
     @Override
@@ -142,4 +148,5 @@ public class MainFragment extends Fragment implements AdapterView.OnItemClickLis
         mAdapter.getFilter().filter(newText);
         return true;
     }
+
 }

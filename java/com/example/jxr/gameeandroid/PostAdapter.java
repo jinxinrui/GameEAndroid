@@ -18,6 +18,9 @@ import com.example.jxr.gameeandroid.model.Post;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * adaptor to organize all the posts
+ */
 public class PostAdapter extends ArrayAdapter<Post> implements Filterable {
     private Activity context;
     private int resource;
@@ -57,6 +60,9 @@ public class PostAdapter extends ArrayAdapter<Post> implements Filterable {
         return v;
     }
 
+    /**
+     * private class to filter the list of posts
+     */
     private class PostFilter extends Filter {
 
         @Override
@@ -65,7 +71,9 @@ public class PostAdapter extends ArrayAdapter<Post> implements Filterable {
             if (constraint != null && constraint.length() > 0) {
                 ArrayList<Post> tempList = new ArrayList<>();
                 for (Post post : postList) {
-                    if (post.getTitle().toLowerCase().contains(constraint.toString().toLowerCase()))
+                    if (post.getTitle().toLowerCase().contains(constraint.toString().toLowerCase()) ||
+                            post.getSystem().toLowerCase().contains(constraint.toString().toLowerCase()) ||
+                            post.getRegion().toLowerCase().contains(constraint.toString().toLowerCase()))
                         tempList.add(post);
                 }
                 results.count = tempList.size();
@@ -106,4 +114,5 @@ public class PostAdapter extends ArrayAdapter<Post> implements Filterable {
     public long getItemId(int i) {
         return i;
     }
+
 }

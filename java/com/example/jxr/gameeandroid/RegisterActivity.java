@@ -20,6 +20,11 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
 
+/**
+* RegisterActivity implements the firebase
+ * register and profile update function
+*/
+
 public class RegisterActivity extends AppCompatActivity implements View.OnClickListener {
 
     private EditText mUsername;
@@ -58,21 +63,14 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         String password = mPassword.getText().toString();
 
         if (email.length() > 0 && password.length() > 0 && username.length() > 0) {
-//            mAuth.createUserWithEmailAndPassword(email, password)
-//                    .addOnFailureListener(this,
-//                            new OnFailureListener() {
-//                                @Override
-//                                public void onFailure(@NonNull Exception e) {
-//                                    createSnackbar(e.getMessage());
-//                                }
-//                            });
+
             mAuth.createUserWithEmailAndPassword(email, password)
                     .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
                                 // Sign in success, update UI with the signed-in user's information
-                                //createSnackbar("Registration complete");
+                                // createSnackbar("Registration complete");
                                 Toast.makeText(getApplicationContext(),"Registration Complete", Toast.LENGTH_LONG).show();
 
                                 // add username to profile
@@ -106,6 +104,10 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         }
     }
 
+    /**
+     * snackbar used to display message
+     * within this activity
+     */
     public void createSnackbar(String message) {
         Snackbar.make(mLayout, message, Snackbar.LENGTH_LONG).show();
     }
